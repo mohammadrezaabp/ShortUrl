@@ -23,15 +23,16 @@ namespace UrlShortner.Controller
         }
 
         [HttpPost]
-       public IActionResult CreateShortCode (string siteUrl)
+       public IActionResult CreateShortCode ([FromBody] ShortUrlModel model)
         {
             
             var shortUrl = new ShortUrl
             {
-                SiteUrl = siteUrl,
+                SiteUrl = model.siteurl,
                 ShortenedUrl = RandomString(5)
             };
             _entity.Add(shortUrl);
+            _context.SaveChanges();
             return Ok(shortUrl.ShortenedUrl);
         }
         private string RandomString(int length)
@@ -45,16 +46,25 @@ namespace UrlShortner.Controller
 
         [HttpGet]
 
-        public IActionResult GetBy(string code)
+        public IActionResult GetByCode(string code)
         {
             var model = _entity.FirstOrDefault(r => r.ShortenedUrl == code);
             if (model != null)
             {
                 model.Count = model.Count + 1;
+                _context.SaveChanges();
                 return Ok(model);
             }
             return BadRequest();
 
         }
+
+
+
+       public class ShortUrlModel
+       {
+
+            public string siteurl { get; set; }
+       }
     }
 }
