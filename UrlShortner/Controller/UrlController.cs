@@ -23,7 +23,7 @@ namespace UrlShortner.Controller
         }
 
         [HttpPost]
-        public IActionResult CreateShortCode (string siteUrl)
+       public IActionResult CreateShortCode (string siteUrl)
         {
             
             var shortUrl = new ShortUrl
